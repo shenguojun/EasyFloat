@@ -1,7 +1,11 @@
 package com.lzf.easyfloat.widget
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.Region
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.lzf.easyfloat.interfaces.OnTouchRangeListener
@@ -46,7 +50,7 @@ class DefaultAddView @JvmOverloads constructor(
         height = h.toFloat()
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         path.reset()
         if (inRange) {
             path.addCircle(width, height, minOf(width, height), Path.Direction.CW)
@@ -55,7 +59,7 @@ class DefaultAddView @JvmOverloads constructor(
             totalRegion.set(zoomSize.toInt(), zoomSize.toInt(), width.toInt(), height.toInt())
             region.setPath(path, totalRegion)
         }
-        canvas?.drawPath(path, paint)
+        canvas.drawPath(path, paint)
         super.onDraw(canvas)
     }
 

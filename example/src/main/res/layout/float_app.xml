@@ -35,7 +35,7 @@
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@id/roundProgressBar"
             android:padding="5dp"
-            android:text="打开首页"
+            android:text="获取剪切板"
             android:textColor="@color/white" />
 
     <CheckBox

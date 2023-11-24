@@ -3,17 +3,17 @@ package com.lzf.easyfloat.example.activity
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MotionEvent
-import android.widget.*
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
 import com.lzf.easyfloat.enums.SidePattern
 import com.lzf.easyfloat.example.R
+import com.lzf.easyfloat.example.databinding.ActivitySwipeTestBinding
 import com.lzf.easyfloat.interfaces.OnTouchRangeListener
 import com.lzf.easyfloat.permission.PermissionUtils
 import com.lzf.easyfloat.utils.DragUtils
 import com.lzf.easyfloat.widget.BaseSwitchView
-import kotlinx.android.synthetic.main.activity_swipe_test.*
 
 /**
  * @author: liuzhenfeng
@@ -27,11 +27,13 @@ class SwipeTestActivity : BaseActivity() {
         const val FLOAT_TAG = "SwipeTestActivity"
     }
 
+    private lateinit var binding: ActivitySwipeTestBinding
     private var noPermission = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_swipe_test)
+        binding = ActivitySwipeTestBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
     }
 

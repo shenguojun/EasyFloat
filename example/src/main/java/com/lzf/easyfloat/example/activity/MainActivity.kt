@@ -19,6 +19,7 @@ import com.lzf.easyfloat.example.widget.*
 import com.lzf.easyfloat.interfaces.OnPermissionResult
 import com.lzf.easyfloat.interfaces.OnTouchRangeListener
 import com.lzf.easyfloat.permission.PermissionUtils
+import com.lzf.easyfloat.utils.DisplayUtils
 import com.lzf.easyfloat.utils.DragUtils
 import com.lzf.easyfloat.widget.BaseSwitchView
 import kotlin.math.max
@@ -33,6 +34,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         private const val TAG_2 = "TAG_2"
         private const val TAG_3 = "TAG_3"
         private const val TAG_4 = "TAG_4"
+
+        private var appFloatWindowX = -1
+        private var appFloatWindowY = -1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -204,8 +208,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         EasyFloat.with(this.applicationContext)
             .setShowPattern(ShowPattern.ALL_TIME)
             .setSidePattern(SidePattern.RESULT_SIDE)
-            .setImmersionStatusBar(true)
-            .setGravity(Gravity.END, -20, 10)
+            .setImmersionStatusBar(false)
             .setLayout(R.layout.float_app) { floatView ->
                 DropHelper.configureView(
                     this,
@@ -252,23 +255,18 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
                         override fun onStopTrackingTouch(seekBar: SeekBar?) {}
                     })
-
-//                // 解决 ListView 拖拽滑动冲突
-//                it.findViewById<ListView>(R.id.lv_test).apply {
-//                    adapter = MyAdapter(
-//                        this@MainActivity,
-//                        arrayOf("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "...")
-//                    )
-//
-//                    // 监听 ListView 的触摸事件，手指触摸时关闭拖拽，手指离开重新开启拖拽
-//                    setOnTouchListener { _, event ->
-//                        logger.e("listView: ${event.action}")
-//                        EasyFloat.appFloatDragEnable(event?.action == MotionEvent.ACTION_UP)
-//                        false
-//                    }
-//                }
             }
             .registerCallback {
+                touchEvent { view, motionEvent ->
+                    when(motionEvent.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            val location = IntArray(2)
+                            view.getLocationOnScreen(location)
+                            appFloatWindowX = location[0]
+                            appFloatWindowY = location[1] - DisplayUtils.getStatusBarHeight(this@MainActivity)
+                        }
+                    }
+                }
                 drag { _, motionEvent ->
                     DragUtils.registerDragClose(motionEvent, object : OnTouchRangeListener {
                         override fun touchInRange(inRange: Boolean, view: BaseSwitchView) {
@@ -287,6 +285,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                             EasyFloat.dismiss()
                         }
                     }, showPattern = ShowPattern.ALL_TIME)
+                }
+            }.apply {
+                if (appFloatWindowX > 0 || appFloatWindowY > 0) {
+                    setLocation(appFloatWindowX, appFloatWindowY)
+                } else {
+                    setGravity(Gravity.CENTER or Gravity.END)
                 }
             }
             .show()

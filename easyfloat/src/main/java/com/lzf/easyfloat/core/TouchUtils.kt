@@ -105,8 +105,8 @@ internal class TouchUtils(val context: Context, val config: FloatConfig) {
 
                 if (config.showPattern == ShowPattern.CURRENT_ACTIVITY) {
                     // 单页面浮窗，设置状态栏不沉浸时，最小高度为状态栏高度
-                    if (y < statusBarHeight(view) && !config.immersionStatusBar) y =
-                        statusBarHeight(view)
+                    if (y < statusBarHeight(view) && !config.immersionStatusBar)
+                        y = statusBarHeight(view)
                 }
 
                 y = when {

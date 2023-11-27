@@ -2,12 +2,12 @@ package com.lzf.easyfloat.example.activity
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import androidx.draganddrop.DropHelper
 import com.lzf.easyfloat.EasyFloat
 import com.lzf.easyfloat.enums.ShowPattern
 import com.lzf.easyfloat.enums.SidePattern
@@ -206,23 +206,42 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             .setSidePattern(SidePattern.RESULT_SIDE)
             .setImmersionStatusBar(true)
             .setGravity(Gravity.END, -20, 10)
-            .setLayout(R.layout.float_app) {floatView ->
+            .setLayout(R.layout.float_app) { floatView ->
+                DropHelper.configureView(
+                    this,
+                    floatView,
+                    arrayOf(
+                        "text/plain",
+                        "text/html",
+                        "text/css",
+                        "text/javascript",
+                        "text/xml",
+                        "text/csv"
+                    )
+                ) { _, payload ->
+                    val split = payload.partition {
+                        !it.text.isNullOrEmpty()
+                    }
+                    val text = split.first.clip.getItemAt(0).text.toString()
+                    if (text.isNotEmpty()) {
+                        TransparentActivity.startTransparentActivity(this, text)
+                    }
+                    split.second
+                }
                 floatView.findViewById<ImageView>(R.id.ivClose).setOnClickListener {
                     EasyFloat.dismiss()
                 }
                 floatView.findViewById<TextView>(R.id.tvOpenMain).setOnClickListener {
-                    val intent = Intent(this, TransparentActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
+                    TransparentActivity.startTransparentActivity(this)
                 }
                 floatView.findViewById<CheckBox>(R.id.checkbox)
                     .setOnCheckedChangeListener { _, isChecked -> EasyFloat.dragEnable(isChecked) }
 
-                val progressBar = floatView.findViewById<RoundProgressBar>(R.id.roundProgressBar).apply {
-                    setProgress(66, "66")
-                    setOnClickListener { toast(getProgressStr()) }
-                }
+                val progressBar =
+                    floatView.findViewById<RoundProgressBar>(R.id.roundProgressBar).apply {
+                        setProgress(66, "66")
+                        setOnClickListener { toast(getProgressStr()) }
+                    }
                 floatView.findViewById<SeekBar>(R.id.seekBar)
                     .setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                         override fun onProgressChanged(

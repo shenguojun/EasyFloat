@@ -6,7 +6,7 @@ android {
     compileSdkVersion 34
     defaultConfig {
         applicationId "com.lzf.easyfloat.example"
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -58,6 +58,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation project(path: ':easyfloat')
+    implementation "androidx.draganddrop:draganddrop:1.0.0"
     implementation 'cn.bingoogolapple:bga-swipebacklayout:2.0.1@aar'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'

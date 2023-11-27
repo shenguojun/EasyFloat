@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_CLIPBOARD" />
 
+    <uses-sdk tools:overrideLibrary="androidx.draganddrop"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"

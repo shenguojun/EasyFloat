@@ -29,26 +29,22 @@ internal object LifecycleUtils {
 
             override fun onActivityStarted(activity: Activity) {
                 // 计算启动的activity数目
-                activity?.let { activityCount++ }
+                activityCount++
             }
 
             override fun onActivityResumed(activity: Activity) {
-                activity?.let {
-                    mTopActivity?.clear()
-                    mTopActivity = WeakReference<Activity>(it)
-                    // 每次都要判断当前页面是否需要显示
-                    checkShow(it)
-                }
+                mTopActivity?.clear()
+                mTopActivity = WeakReference<Activity>(activity)
+                // 每次都要判断当前页面是否需要显示
+                checkShow(activity)
             }
 
             override fun onActivityPaused(activity: Activity) {}
 
             override fun onActivityStopped(activity: Activity) {
-                activity?.let {
-                    // 计算关闭的activity数目，并判断当前App是否处于后台
-                    activityCount--
-                    checkHide(it)
-                }
+                // 计算关闭的activity数目，并判断当前App是否处于后台
+                activityCount--
+                checkHide(activity)
             }
 
             override fun onActivityDestroyed(activity: Activity) {}

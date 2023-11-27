@@ -5,7 +5,12 @@ import android.view.View
 import com.lzf.easyfloat.anim.DefaultAnimator
 import com.lzf.easyfloat.enums.ShowPattern
 import com.lzf.easyfloat.enums.SidePattern
-import com.lzf.easyfloat.interfaces.*
+import com.lzf.easyfloat.interfaces.FloatCallbacks
+import com.lzf.easyfloat.interfaces.OnDisplayHeight
+import com.lzf.easyfloat.interfaces.OnFloatAnimator
+import com.lzf.easyfloat.interfaces.OnFloatCallbacks
+import com.lzf.easyfloat.interfaces.OnInvokeView
+import com.lzf.easyfloat.interfaces.PermissionRequester
 import com.lzf.easyfloat.utils.DefaultDisplayHeight
 
 /**
@@ -73,11 +78,12 @@ data class FloatConfig(
 
     // 不需要显示系统浮窗的页面集合，参数为类名
     val filterSet: MutableSet<String> = mutableSetOf(),
-    // 是否设置，当前创建的页面也被过滤
-    internal var filterSelf: Boolean = false,
     // 是否需要显示，当过滤信息匹配上时，该值为false（用户手动调用隐藏，该值也为false，相当于手动过滤）
     internal var needShow: Boolean = true,
 
     // 当layout大小变化后，整体view的位置的摆放
-    var layoutChangedGravity: Int = Gravity.TOP.or(Gravity.START)
+    var layoutChangedGravity: Int = Gravity.TOP.or(Gravity.START),
+
+    // 权限申请器，实现后优先使用此申请器申请权限，满足用户的合规需求和自定义需求
+    var permissionRequester: PermissionRequester? = null
 )
